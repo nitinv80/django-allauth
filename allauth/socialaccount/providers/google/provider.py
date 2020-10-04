@@ -39,7 +39,11 @@ class GoogleProvider(OAuth2Provider):
         return ret
 
     def extract_uid(self, data):
-        return str(data["id"])
+        try:
+            return str(data['id'])
+        except KeyError:
+            return str(data['user_id'])
+
 
     def extract_common_fields(self, data):
         return dict(
