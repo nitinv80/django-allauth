@@ -41,9 +41,14 @@ class AppleOAuth2Client(OAuth2Client):
             "exp": now + timedelta(hours=1),
         }
         headers = {"kid": self.consumer_secret, "alg": "ES256"}
-        client_secret = jwt.encode(
-            payload=claims, key=app.certificate, algorithm="ES256", headers=headers
-        ).decode("utf-8")
+        try:
+            client_secret = jwt.encode(
+                payload=claims, key=app.certificate, algorithm="ES256", headers=headers
+            ).decode("utf-8")
+        except AttributeError:
+            client_secret = jwt.encode(
+                payload=claims, key=app.certificate, algorithm="ES256", headers=headers
+            )
         return client_secret
 
     def get_client_id(self):
